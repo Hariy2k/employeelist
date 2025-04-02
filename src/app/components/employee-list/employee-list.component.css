@@ -1,0 +1,284 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #039be5;
+  color: white;
+  padding: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.toolbar-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.content-container {
+  flex: 1;
+  background-color: #f5f5f5;
+  overflow: auto;
+  min-height: calc(100vh - 56px);
+}
+
+.loading-container, .error-container, .no-records-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+  min-height: calc(100vh - 130px);
+}
+
+.error-container {
+  color: #f44336;
+}
+
+.error-container mat-icon {
+  font-size: 64px;
+  height: 64px;
+  width: 64px;
+  margin-bottom: 16px;
+}
+
+.error-container button {
+  margin-top: 16px;
+}
+
+.no-records-text {
+  color: #333;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.section-title {
+  padding: 8px 16px;
+  margin: 0;
+  background-color: #f0f0f0;
+  color: #424242;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.employee-item-container {
+  position: relative;
+  background: white;
+  margin-bottom: 1px;
+  overflow: hidden;
+}
+
+.employee-item {
+  position: relative;
+  z-index: 2;
+  background: white;
+  transition: transform 0.2s ease-out;
+  touch-action: pan-x;
+  cursor: grab;
+}
+
+.employee-details {
+  flex: 1;
+  padding: 12px 16px;
+}
+
+.employee-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #039be5;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  -webkit-tap-highlight-color: rgba(33, 150, 243, 0.1);
+}
+
+.employee-name:active {
+  opacity: 0.7;
+}
+
+/* Add underline on hover for desktop */
+@media (hover: hover) {
+  .employee-name:hover {
+    text-decoration: underline;
+  }
+}
+
+.employee-role {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.employee-date {
+  margin: 0;
+  font-size: 12px;
+  color: #999;
+}
+
+/* Fix for Safari/iOS dropdown visibility */
+.mat-select-panel {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000;
+  -webkit-perspective: 1000;
+  z-index: 1000 !important;
+  position: absolute !important;
+  background: white !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
+              0 4px 5px 0 rgba(0, 0, 0, 0.14),
+              0 1px 10px 0 rgba(0, 0, 0, 0.12) !important;
+}
+
+.mat-select-panel .mat-option {
+  line-height: 48px !important;
+  height: 48px !important;
+  padding: 0 16px !important;
+  font-size: 16px !important;
+}
+
+/* Ensure the select overlay is visible on iOS */
+.cdk-overlay-container {
+  z-index: 10000 !important;
+}
+
+.cdk-overlay-pane {
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+}
+
+/* Make sure the select panel is above other content */
+.mat-select-panel-wrap {
+  position: relative !important;
+  z-index: 9999 !important;
+}
+
+.employee-actions {
+  display: none;
+}
+
+.fab-button {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 100;
+  background-color: #2196F3;
+  color: white;
+  height: 44px;
+  width: 44px;
+  min-width: 44px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 5px !important;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.swipe-hint {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 8px 16px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+  text-align: left;
+}
+
+.swipe-hint p {
+  margin: 0;
+  color: #757575;
+  font-size: 14px;
+}
+
+.edit-button {
+  display: none;
+}
+
+.delete-button {
+  color: #F44336;
+  min-width: 30px;
+  padding: 0;
+  line-height: 24px;
+  font-size: 12px;
+}
+
+.add-symbol {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.delete-action {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #F44336;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 24px;
+  z-index: 1;
+  color: white;
+}
+
+.delete-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Show delete background immediately when dragging starts */
+.employee-item-container.dragging .delete-action {
+  opacity: 1;
+}
+
+.employee-item-container.deleting .employee-item {
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-out;
+}
+
+/* Disable text selection during drag */
+.employee-item-container.dragging {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Prevent right swipe */
+.cdk-drag {
+  touch-action: pan-x;
+}
+
+/* CDK drag styles */
+.cdk-drag-handle {
+  cursor: move;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1) !important;
+}

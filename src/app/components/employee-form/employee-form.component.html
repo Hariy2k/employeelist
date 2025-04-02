@@ -1,0 +1,185 @@
+<div class="container">
+  <div class="toolbar">
+    <h1 class="toolbar-title">{{isEditMode() ? 'Edit' : 'Add'}} Employee Details</h1>
+  </div>
+
+  <div *ngIf="isLoading()" class="loading-spinner">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <div *ngIf="error()" class="error-message">
+    <p>{{error()}}</p>
+  </div>
+
+  <div class="form-content" *ngIf="!isLoading()">
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+      <!-- Employee Name -->
+      <div class="input-container">
+        <mat-icon class="input-icon">person</mat-icon>
+        <input type="text" class="form-input" formControlName="name" placeholder="Employee name">
+      </div>
+
+      <!-- Employee Role -->
+      <div class="input-container" (click)="openRoleSelector()">
+        <mat-icon class="input-icon">work</mat-icon>
+        <div class="select-display">
+          <span *ngIf="employeeForm.get('position')?.value">{{employeeForm.get('position')?.value}}</span>
+          <span *ngIf="!employeeForm.get('position')?.value" class="placeholder">Select role</span>
+        </div>
+        <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
+      </div>
+
+      <!-- Date Fields in same row -->
+      <div class="date-row-container">
+        <!-- Start Date -->
+        <div class="date-input-container" (click)="openStartDatePicker()">
+          <mat-icon class="input-icon">event</mat-icon>
+          <div class="date-text">
+            {{employeeForm.get('startDate')?.value ? (employeeForm.get('startDate')?.value | date:'d MMM, yyyy') : 'Today'}}
+          </div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="arrow-container">
+          <mat-icon>arrow_forward</mat-icon>
+        </div>
+        
+        <!-- End Date -->
+        <div class="date-input-container" (click)="openEndDatePicker()">
+          <mat-icon class="input-icon">event</mat-icon>
+          <div class="date-text">
+            {{employeeForm.get('endDate')?.value ? (employeeForm.get('endDate')?.value | date:'d MMM, yyyy') : 'No date'}}
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Action Buttons -->
+  <div class="action-buttons">
+    <button type="button" class="dialog-btn cancel" (click)="cancel()">Cancel</button>
+    <button type="submit" class="dialog-btn save" [disabled]="employeeForm.invalid" (click)="onSubmit()">Save</button>
+  </div>
+</div>
+
+<!-- Custom Start Date Picker Dialog -->
+<ng-template #startDatePickerTemplate>
+  <div class="date-picker-dialog">
+    <!-- Date Shortcuts Row -->
+    <div class="date-row">
+      <button class="date-btn" [class.highlight]="isToday(tempStartDate())" (click)="selectStartDateShortcut('today')">Today</button>
+      <button class="date-btn" [class.highlight]="isNextMonday(tempStartDate())" (click)="selectStartDateShortcut('nextMonday')">Next Monday</button>
+    </div>
+    <div class="date-row">
+      <button class="date-btn" [class.highlight]="isNextTuesday(tempStartDate())" (click)="selectStartDateShortcut('nextTuesday')">Next Tuesday</button>
+      <button class="date-btn" [class.highlight]="isAfterOneWeek(tempStartDate())" (click)="selectStartDateShortcut('afterOneWeek')">After 1 week</button>
+    </div>
+    
+    <!-- Month Navigation Header -->
+    <div class="month-navigation">
+      <button class="month-nav-button prev" (click)="prevMonth()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <div class="month-year">{{tempStartDate() | date:'MMMM yyyy'}}</div>
+      <button class="month-nav-button next" (click)="nextMonth()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+    
+    <!-- Weekday Header -->
+    <div class="weekday-row">
+      <div class="weekday">Sun</div>
+      <div class="weekday">Mon</div>
+      <div class="weekday">Tue</div>
+      <div class="weekday">Wed</div>
+      <div class="weekday">Thu</div>
+      <div class="weekday">Fri</div>
+      <div class="weekday">Sat</div>
+    </div>
+    
+    <!-- Calendar Section -->
+    <div class="calendar-section">
+      <div class="calendar-grid">
+        <mat-calendar [selected]="tempStartDate()" (selectedChange)="selectStartDate($event)"></mat-calendar>
+      </div>
+    </div>
+    
+    <!-- Footer with date and actions -->
+    <div class="date-picker-footer">
+      <div class="selected-date">
+        <mat-icon>event</mat-icon>
+        <span>{{tempStartDate() | date:'d MMM yyyy'}}</span>
+      </div>
+      
+      <div class="footer-actions">
+        <button class="dialog-btn cancel" (click)="closeStartDatePicker()">Cancel</button>
+        <button class="dialog-btn save" (click)="saveStartDate()">Save</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Custom End Date Picker Dialog -->
+<ng-template #endDatePickerTemplate>
+  <div class="date-picker-dialog">
+    <!-- Date Shortcuts Row -->
+    <div class="date-row">
+      <button class="date-btn" [class.highlight]="!tempEndDate()" (click)="selectEndDateShortcut('none')">No date</button>
+      <button class="date-btn" [class.highlight]="isToday(tempEndDate())" (click)="selectEndDateShortcut('today')">Today</button>
+    </div>
+    
+    <!-- Month Navigation Header -->
+    <div class="month-navigation">
+      <button class="month-nav-button prev" (click)="prevMonthEnd()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <div class="month-year">{{(tempEndDate() ? tempEndDate() : currentDate()) | date:'MMMM yyyy'}}</div>
+      <button class="month-nav-button next" (click)="nextMonthEnd()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+    
+    <!-- Weekday Header -->
+    <div class="weekday-row">
+      <div class="weekday">Sun</div>
+      <div class="weekday">Mon</div>
+      <div class="weekday">Tue</div>
+      <div class="weekday">Wed</div>
+      <div class="weekday">Thu</div>
+      <div class="weekday">Fri</div>
+      <div class="weekday">Sat</div>
+    </div>
+    
+    <!-- Calendar Section -->
+    <div class="calendar-section">
+      <div class="calendar-grid">
+        <mat-calendar [selected]="tempEndDate()" (selectedChange)="selectEndDate($event)"></mat-calendar>
+      </div>
+    </div>
+    
+    <!-- Footer with date and actions -->
+    <div class="date-picker-footer">
+      <div class="selected-date">
+        <mat-icon>event</mat-icon>
+        <span *ngIf="tempEndDate()">{{tempEndDate() | date:'d MMM yyyy'}}</span>
+        <span *ngIf="!tempEndDate()">No date</span>
+      </div>
+      
+      <div class="footer-actions">
+        <button class="dialog-btn cancel" (click)="closeEndDatePicker()">Cancel</button>
+        <button class="dialog-btn save" (click)="saveEndDate()">Save</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Role Selector Bottom Sheet -->
+<ng-template #roleSelectorTemplate>
+  <div class="role-selector-overlay" (click)="closeRoleSelector()">
+    <div class="role-selector-content" (click)="$event.stopPropagation()">
+      <div class="role-option" *ngFor="let role of roles" (click)="selectRole(role)">
+        {{role}}
+      </div>
+    </div>
+  </div>
+</ng-template>

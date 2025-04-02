@@ -1,0 +1,593 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+  background-color: #f5f5f5;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.toolbar {
+  background-color: #039be5;
+  color: white;
+  padding: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.toolbar-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.form-content {
+  flex: 1;
+  padding: 16px;
+  background-color: #f5f5f5;
+  overflow-y: auto;
+  padding-bottom: 80px; /* Space for the fixed buttons */
+}
+
+/* Input styling */
+.input-container {
+  position: relative;
+  margin-bottom: 16px;
+  background-color: white;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  height: 56px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #039be5;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-input {
+  width: 100%;
+  padding: 16px 16px 16px 50px;
+  border: none;
+  font-size: 16px;
+  outline: none;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.form-select {
+  width: 100%;
+  padding: 16px 16px 16px 50px;
+  border: none;
+  font-size: 16px;
+  background-color: transparent;
+  appearance: none;
+  outline: none;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.select-container {
+  position: relative;
+  height: 100%;
+}
+
+.dropdown-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #039be5;
+  pointer-events: none;
+}
+
+/* Date fields styling */
+.date-row-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  width: 100%;
+  gap: 16px;
+}
+
+.date-input-container {
+  flex: 1;
+  position: relative;
+  background-color: white;
+  border-radius: 4px;
+  padding: 0 16px 0 50px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  min-width: 120px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+.arrow-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 56px;
+  flex-shrink: 0;
+}
+
+.arrow-container mat-icon {
+  color: #039be5;
+}
+
+.date-text {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Button styling for form actions */
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 16px;
+  background-color: white;
+  z-index: 10;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Remove the old button styles */
+.btn-cancel, .btn-save {
+  display: none;
+}
+
+/* Dialog buttons both for date picker and form actions */
+.dialog-btn {
+  padding: 8px 16px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: 500;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+.dialog-btn.cancel {
+  background-color: #f1f8ff;
+  color: #333;
+}
+
+.dialog-btn.save {
+  background-color: #039be5;
+  color: white;
+}
+
+.dialog-btn.save:disabled {
+  background-color: rgba(3, 155, 229, 0.5);
+  cursor: not-allowed;
+}
+
+/* Date picker dialog styling */
+.date-picker-dialog {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Date row for shortcuts */
+.date-row {
+  display: flex;
+  margin-bottom: 8px;
+  padding: 0 8px;
+}
+
+.date-row:first-child {
+  margin-top: 16px;
+}
+
+.date-btn {
+  flex: 1;
+  margin: 0 8px;
+  padding: 12px 0;
+  background-color: #f1f8ff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.date-btn.highlight {
+  background-color: #039be5;
+  color: white;
+}
+
+/* Calendar header section */
+.calendar-header {
+  padding: 0 16px;
+  margin-top: 16px;
+}
+
+.month-display {
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.weekday-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.weekday {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  color: #757575;
+  padding: 4px 0;
+}
+
+/* Calendar section */
+.calendar-section {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+/* Custom styling for Mat Calendar */
+.calendar-grid ::ng-deep .mat-calendar {
+  width: 100%;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Hide header - we use our own */
+.calendar-grid ::ng-deep .mat-calendar-header {
+  display: none !important;
+}
+
+/* Hide weekday names - we use our own */
+.calendar-grid ::ng-deep .mat-calendar-table-header {
+  display: none !important;
+}
+
+/* Add padding to calendar content */
+.calendar-grid ::ng-deep .mat-calendar-content {
+  padding: 0 16px;
+}
+
+/* Style the calendar table */
+.calendar-grid ::ng-deep table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Style individual cells */
+.calendar-grid ::ng-deep .mat-calendar-body-cell {
+  height: 38px;
+  width: 38px;
+  text-align: center;
+}
+
+/* Style the calendar cells */
+.calendar-grid ::ng-deep .mat-calendar-body-cell-content {
+  border-radius: 50%;
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.calendar-grid ::ng-deep .mat-calendar-body-selected {
+  background-color: #039be5;
+  border-radius: 50%;
+}
+
+.calendar-grid ::ng-deep .mat-calendar-body-cell.mat-calendar-body-active {
+  background-color: transparent !important;
+}
+
+/* Style today marker */
+.calendar-grid ::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(3, 155, 229, 0.1);
+  color: inherit;
+}
+
+/* Date picker footer */
+.date-picker-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #fff;
+  border-top: 1px solid #eee;
+}
+
+.selected-date {
+  display: flex;
+  align-items: center;
+}
+
+.selected-date mat-icon {
+  margin-right: 8px;
+  color: #039be5;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.footer-actions {
+  display: flex;
+}
+
+/* Month navigation styling */
+.month-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #fff;
+}
+
+.month-nav-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #757575;
+}
+
+.month-nav-button mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.month-year {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Weekday row */
+.weekday-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 0 16px;
+}
+
+.weekday {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  color: #757575;
+  font-weight: normal;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 600px) {
+  .date-row-container {
+    flex-wrap: nowrap;
+    gap: 8px;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .date-input-container {
+    flex: 1;
+    margin-bottom: 0;
+    min-width: 0;
+    max-width: calc(50% - 20px);
+  }
+  
+  .form-content {
+    padding: 16px;
+    padding-bottom: 80px;
+  }
+  
+  .date-text {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .arrow-container {
+    margin: 0;
+    transform: none;
+    width: 20px;
+    height: 56px;
+  }
+  
+  .input-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .form-input, .form-select {
+    padding-left: 46px;
+  }
+  
+  .date-input-container {
+    padding: 0 12px 0 46px;
+  }
+  
+  .arrow-container mat-icon {
+    transform: rotate(-90deg);
+  }
+}
+
+/* Hide the extra month label from the calendar */
+.calendar-grid ::ng-deep .mat-calendar-body-label {
+  display: none !important;
+}
+
+/* Adjust calendar table layout after removing the label */
+.calendar-grid ::ng-deep .mat-calendar-table {
+  border-collapse: collapse;
+}
+
+.calendar-grid ::ng-deep .mat-calendar-table-header {
+  display: none !important;
+}
+
+/* Make sure we don't have any extra space from the removed label */
+.calendar-grid ::ng-deep .mat-calendar-body-label-cell {
+  height: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+/* Role dropdown styling */
+.select-display {
+  width: 100%;
+  padding: 16px 16px 16px 50px;
+  font-size: 16px;
+  color: #333;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.placeholder {
+  color: #999;
+}
+
+/* Role selector styles */
+.role-selector-dialog {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-height: 80vh !important;
+  width: 100% !important;
+  border-radius: 12px 12px 0 0 !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  will-change: transform !important;
+  overscroll-behavior: contain !important;
+}
+
+.role-selector-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.32);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.role-selector-content {
+  background: white;
+  border-radius: 12px 12px 0 0;
+  padding: 8px 0;
+  max-height: 80vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  z-index: 1001;
+}
+
+.role-option {
+  padding: 16px;
+  font-size: 16px;
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.87);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s;
+}
+
+.role-option:active {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Override Material Dialog styles for iOS */
+::ng-deep .role-selector-dialog .mat-dialog-container {
+  padding: 0 !important;
+  border-radius: 12px 12px 0 0 !important;
+  overflow: hidden !important;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1) !important;
+  background-color: white !important;
+  position: relative !important;
+  z-index: 1001 !important;
+}
+
+::ng-deep .role-selector-backdrop {
+  background: rgba(0, 0, 0, 0.32) !important;
+  -webkit-tap-highlight-color: transparent !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 1000 !important;
+}
+
+/* Fix for iOS Safari bottom safe area */
+@supports (-webkit-touch-callout: none) {
+  .role-selector-dialog {
+    padding-bottom: env(safe-area-inset-bottom) !important;
+  }
+  
+  .role-selector-content {
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Ensure proper stacking context */
+::ng-deep .cdk-overlay-container {
+  position: fixed !important;
+  z-index: 9999 !important;
+  pointer-events: none !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+::ng-deep .cdk-global-overlay-wrapper {
+  position: fixed !important;
+  z-index: 9999 !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  pointer-events: auto !important;
+}

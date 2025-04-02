@@ -1,0 +1,84 @@
+<div class="container">
+  <div class="toolbar">
+    <h1 class="toolbar-title">Employee List</h1>
+  </div>
+
+  <div class="content-container">
+    <!-- Loading state -->
+    <div *ngIf="isLoading()" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading employees...</p>
+    </div>
+
+    <!-- Error state -->
+    <div *ngIf="error()" class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{error()}}</p>
+      <button mat-raised-button color="primary" (click)="loadEmployees()">Try Again</button>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="!isLoading() && !error() && employees().length === 0" class="no-records-container">
+      <img src="assets/no-records.png" alt="No records found" class="no-records-image">
+    </div>
+
+    <!-- Employee lists -->
+    <div *ngIf="!isLoading() && !error() && employees().length > 0" class="employee-lists">
+      <!-- Current employees section -->
+      <div class="employee-section" *ngIf="currentEmployees().length > 0">
+        <h2 class="section-title">Current employees</h2>
+
+        <div class="employee-item-container" *ngFor="let employee of currentEmployees(); trackBy: trackById"
+          [class.deleting]="isDeleting(employee)"
+          [class.dragging]="isDragging()">
+          <div cdkDrag cdkDragLockAxis="x" (cdkDragStarted)="onDragStarted()" (cdkDragMoved)="onDragMoved($event)"
+            (cdkDragEnded)="onDragEnded($event, employee)" class="employee-item">
+            <div class="employee-details">
+              <h3 class="employee-name" (click)="$event.stopPropagation(); editEmployee(employee)">{{employee.name}}</h3>
+              <p class="employee-role">{{employee.position}}</p>
+              <p class="employee-date">From {{employee.startDate | date:'d MMM, yyyy'}}</p>
+            </div>
+          </div>
+          <div class="delete-action" (click)="confirmDelete(employee)">
+            <div class="delete-icon">
+              <mat-icon>delete</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Previous employees section -->
+      <div class="employee-section" *ngIf="previousEmployees().length > 0">
+        <h2 class="section-title">Previous employees</h2>
+
+        <div class="employee-item-container" *ngFor="let employee of previousEmployees(); trackBy: trackById"
+          [class.deleting]="isDeleting(employee)"
+          [class.dragging]="isDragging()">
+          <div cdkDrag cdkDragLockAxis="x" (cdkDragStarted)="onDragStarted()" (cdkDragMoved)="onDragMoved($event)"
+            (cdkDragEnded)="onDragEnded($event, employee)" class="employee-item">
+            <div class="employee-details">
+              <h3 class="employee-name" (click)="$event.stopPropagation(); editEmployee(employee)">{{employee.name}}</h3>
+              <p class="employee-role">{{employee.position}}</p>
+              <p class="employee-date">{{employee.startDate | date:'d MMM, yyyy'}} - {{employee.endDate | date:'d MMM,
+                yyyy'}}</p>
+            </div>
+          </div>
+          <div class="delete-action" (click)="confirmDelete(employee)">
+            <div class="delete-icon">
+              <mat-icon>delete</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="swipe-hint" *ngIf="employees().length > 0">
+    <p>Swipe left to delete</p>
+  </div>
+
+  <!-- Add button -->
+  <button class="fab-button custom-fab" (click)="addEmployee()">
+    <span class="add-symbol">+</span>
+  </button>
+</div>
